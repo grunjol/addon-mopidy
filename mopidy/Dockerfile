@@ -16,8 +16,6 @@ RUN \
         dirmngr=2.2.12-1+deb10u1 \
         gpg-agent=2.2.12-1+deb10u1 \
         gpg=2.2.12-1+deb10u1 \
-        libnginx-mod-http-lua=1.14.2-2+deb10u3 \
-        luarocks=2.4.2+dfsg-1 \
         nginx=1.14.2-2+deb10u3 \
         git=1:2.20.1-2+deb10u3 \
     \
@@ -44,8 +42,6 @@ RUN \
         gstreamer1.0-plugins-ugly=1.14.4-1 \
         gstreamer1.0-pulseaudio=1.14.4-1 \
     \
-    && luarocks install lua-resty-http 0.15-0 \
-    \
     && curl https://bootstrap.pypa.io/get-pip.py | python3 \
     && pip3 install --no-cache-dir -r /tmp/requirements.txt \
     \
@@ -68,7 +64,6 @@ RUN \
         python-dev \
         dpkg-dev \
         gcc-7 \
-        luarocks \
     && rm -fr \
         /var/{cache,log}/* \
         /var/lib/apt/lists/* \
@@ -84,25 +79,28 @@ COPY rootfs /
 # Build arguments
 ARG BUILD_ARCH
 ARG BUILD_DATE
+ARG BUILD_DESCRIPTION
+ARG BUILD_NAME
 ARG BUILD_REF
+ARG BUILD_REPOSITORY
 ARG BUILD_VERSION
 
 # Labels
 LABEL \
-    io.hass.name="Mopidy" \
-    io.hass.description="Mopidy is an extensible music server" \
+    io.hass.name="${BUILD_NAME}" \
+    io.hass.description="${BUILD_DESCRIPTION}" \
     io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
     io.hass.version=${BUILD_VERSION} \
     maintainer="Bram Mittendorff, Franck Nijhof, Robbert Müller" \
-    org.opencontainers.image.title="Mopidy" \
-    org.opencontainers.image.description="Mopidy is an extensible music server" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
     org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
     org.opencontainers.image.authors="Bram Mittendorff, Franck Nijhof, Robbert Müller" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.url="https://addons.community" \
-    org.opencontainers.image.source="https://github.com/hassio-addons/addon-mopidy" \
-    org.opencontainers.image.documentation="https://github.com/hassio-addons/addon-mopidy/blob/master/README.md" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
     org.opencontainers.image.created=${BUILD_DATE} \
     org.opencontainers.image.revision=${BUILD_REF} \
     org.opencontainers.image.version=${BUILD_VERSION}
